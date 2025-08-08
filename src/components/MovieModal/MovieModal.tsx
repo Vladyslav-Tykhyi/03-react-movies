@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import s from "./MovieModal.module.css";
-import type { Movie } from "../../types/movies";
+import type { Movie } from "../../types/movie";
 
 type MovieModalProps = {
   movie: Movie;

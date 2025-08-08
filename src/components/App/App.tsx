@@ -4,7 +4,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
 import MovieModal from "../MovieModal/MovieModal";
-import type { Movie } from "../../types/movies";
+import type { Movie } from "../../types/movie";
 import { Toaster, toast } from "react-hot-toast";
 import { searchMovies } from "../../services/movieService";
 import axios from "axios";

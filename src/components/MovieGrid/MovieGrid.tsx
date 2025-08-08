@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./MovieGrid.module.css";
-import type { Movie } from "../../types/movies";
+import type { Movie } from "../../types/movie";
 
 type MovieGridProps = {
   movies: Movie[];
