@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader";
 import MovieModal from "../MovieModal/MovieModal";
 import type { Movie } from "../../types/movies";
 import { Toaster, toast } from "react-hot-toast";
-import { searchMovies } from "../../services/moviesApi";
+import { searchMovies } from "../../services/movieService";
 import axios from "axios";
 
 const App = () => {
