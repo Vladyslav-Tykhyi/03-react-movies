@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import s from "./MovieModal.module.css";
 import type { Movie } from "../../types/movies";
 
@@ -10,6 +11,7 @@ type MovieModalProps = {
 const IMG_BASE = "https://image.tmdb.org/t/p/original";
 
 const MovieModal = ({ movie, onClose }: MovieModalProps) => {
+  // esc + body scroll lock
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -29,7 +31,10 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
     if (e.target === e.currentTarget) onClose();
   };
 
-  return (
+  const modalRoot = document.getElementById("modal-root");
+  if (!modalRoot) return null; // safety: geen portal mount → render niets
+
+  return createPortal(
     <div
       className={s.backdrop}
       role="dialog"
@@ -42,7 +47,7 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
           aria-label="Close modal"
           onClick={onClose}
         >
-          x
+          &times;
         </button>
         <img
           src={movie.backdrop_path ? `${IMG_BASE}${movie.backdrop_path}` : ""}
@@ -61,7 +66,8 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
           </p>
         </div>
       </div>
-    </div>
+    </div>,
+    modalRoot
   );
 };
 
