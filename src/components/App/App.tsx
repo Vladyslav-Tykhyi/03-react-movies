@@ -1,15 +1,13 @@
 import { useState } from "react";
 import s from "./App.module.css";
-import axios from "axios";
 import SearchBar from "../SearchBar/SearchBar";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
 import MovieModal from "../MovieModal/MovieModal";
 import type { Movie } from "../../types/movies";
 import { Toaster, toast } from "react-hot-toast";
-
-const API_KEY = import.meta.env.VITE_TMDB_TOKEN;
-type TMDBResponse = { results: Movie[] };
+import { searchMovies } from "../../services/moviesApi";
+import axios from "axios";
 
 const App = () => {
   const [value, setValue] = useState("");
@@ -20,25 +18,19 @@ const App = () => {
   const fetchMovies = async (query: string) => {
     try {
       setLoading(true);
-      const res = await axios.get<TMDBResponse>(
-        "https://api.themoviedb.org/3/search/movie",
-        {
-          params: { query, include_adult: false, language: "en-US", page: 1 },
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${API_KEY}`,
-          },
-        }
-      );
-
-      const results = res.data.results ?? [];
+      const results = await searchMovies(query);
       if (results.length === 0) {
         toast("No movies found for your request.");
       }
       setMovies(results);
-    } catch (e) {
-      console.error(e);
-      toast.error("Something went wrong. Try again.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const apiMsg = (err.response?.data as { status_message?: string })
+          ?.status_message;
+        toast.error(apiMsg ?? err.message);
+      } else {
+        toast.error("Something went wrong. Try again.");
+      }
     } finally {
       setLoading(false);
     }
