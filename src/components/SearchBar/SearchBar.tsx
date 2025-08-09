@@ -2,16 +2,10 @@ import s from "./SearchBar.module.css";
 import { toast } from "react-hot-toast";
 
 interface SearchBarProps {
-  searchValue: string;
-  onSearchChange: (value: string) => void;
-  onSearchSubmit: () => void;
+  onSubmit: (query: string) => void;
 }
 
-const SearchBar = ({
-  searchValue,
-  onSearchChange,
-  onSearchSubmit,
-}: SearchBarProps) => {
+const SearchBar = ({ onSubmit }: SearchBarProps) => {
   return (
     <header className={s.header}>
       <div className={s.container}>
@@ -23,16 +17,16 @@ const SearchBar = ({
         >
           Powered by TMDB
         </a>
+
         <form
           className={s.form}
-          onSubmit={(e) => {
-            e.preventDefault();
-            const q = searchValue.trim();
+          action={(formData: FormData) => {
+            const q = (formData.get("query") as string | null)?.trim() ?? "";
             if (!q) {
               toast.error("Please enter your search query.");
               return;
             }
-            onSearchSubmit(); // App doet de fetch
+            onSubmit(q);
           }}
         >
           <input
@@ -41,9 +35,8 @@ const SearchBar = ({
             name="query"
             autoComplete="off"
             placeholder="Search movies..."
+            aria-label="Search movies"
             autoFocus
-            value={searchValue}
-            onChange={(e) => onSearchChange(e.target.value)}
           />
           <button className={s.button} type="submit">
             Search

@@ -13,7 +13,7 @@ export const tmdb = axios.create({
   },
 });
 
-export async function searchMovies(query: string) {
+export async function searchMovies(query: string): Promise<Movie[]> {
   const res = await tmdb.get<TMDBResponse>("/search/movie", {
     params: { query, include_adult: false, language: "en-US", page: 1 },
   });
